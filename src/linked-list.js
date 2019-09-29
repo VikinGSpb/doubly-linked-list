@@ -15,11 +15,11 @@ class LinkedList {
     }
 
     head() {
-        return this.dataStorage[0];
+        return this._head;
     }
 
     tail() {
-        return this.dataStorage[this.length - 1];
+        return this._tail;
     }
 
     at(index) {
@@ -36,10 +36,10 @@ class LinkedList {
     }
 
     clear() {
-        this.dataStorage.splice(0, this.length - 1);
+        this.dataStorage.splice(0, this.length);
         this.length = 0;
-        this._tail = 0;
-        this._head = 0;
+        this._tail = null;
+        this._head = null;
         return this;
     }
 
@@ -52,6 +52,8 @@ class LinkedList {
 
     reverse() {
         this.dataStorage.reverse();
+        this._head = this.dataStorage[0];
+        this._tail = this.dataStorage[this.length - 1];
         return this;
     }
 
