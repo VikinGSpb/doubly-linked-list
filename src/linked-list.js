@@ -4,30 +4,62 @@ class LinkedList {
     constructor() {
         this.dataStorage = [];
         this.length = 0;
+        this._head = null;
+        this._tail = null;
     }
 
     append(data) {
-        this.dataStorage.push(data);
-        this.length++;
-        this._head = this.dataStorage[0];
+        if(this.isEmpty())
+        {
+            this.dataStorage[0] = new Node(data);
+            this.length++;
+            this._head = this.dataStorage[0];
+        }
+        else {
+            this.dataStorage[this.length] = new Node(data, this.dataStorage[this.length - 1]);
+            this.dataStorage[this.length - 1].next = this.dataStorage[this.length];
+            this.length++;
+        }
         this._tail = this.dataStorage[this.length - 1];
         return this;
     }
 
     head() {
-        return this._head;
+        if(this.length == 0) return null;
+        else return this._head.data;
     }
 
     tail() {
-        return this._tail;
+        if(this.length == 0) return null;
+        else return this._tail.data;
     }
 
     at(index) {
-        return this.dataStorage[index];
+        return this.dataStorage[index].data;
     }
 
     insertAt(index, data) {
-        this.dataStorage.splice(index, 0, data);
+        this.append(data);
+        let spliceData = this.dataStorage[this.length - 1];
+        this.dataStorage.splice(index, 0, spliceData);
+        for(let i = index; i < this.length; i++)
+        {
+            if(i == 0)
+            {
+                this.dataStorage[i].next = this.dataStorage[i + 1];
+                this.dataStorage[i].prev = null;
+                continue;
+            }
+            if(this.dataStorage[i + 1])
+            {
+                this.dataStorage[i].next = this.dataStorage[i + 1];
+                this.dataStorage[i].prev = this.dataStorage[i - 1];
+            } else {
+                this.dataStorage[i].next = null;
+                this.dataStorage[i].prev = this.dataStorage[i - 1];
+            }
+        }
+        this._tail = this.dataStorage[this.length - 1];
         return this;
     }
 
@@ -36,17 +68,25 @@ class LinkedList {
     }
 
     clear() {
-        this.dataStorage.splice(0, this.length);
-        this.length = 0;
-        this._tail = null;
-        this._head = null;
-        return this;
+        if (this.isEmpty()) return this;
+        else {
+            this.dataStorage.splice(0, this.length);
+            this.length = 0;
+            this._tail = null;
+            this._head = null;
+            return this;
+        }
     }
 
     deleteAt(index) {
         this.dataStorage.splice(index, 1);
         this.length--;
-        this._tail = this.dataStorage[this.length - 1];
+        if(this.length == 0) 
+        {
+            this._tail = null;
+            this._head = null;
+        }
+        else this._tail = this.dataStorage[this.length - 1];
         return this;
     }
 
@@ -59,7 +99,7 @@ class LinkedList {
 
     indexOf(data) {
         for(let i = 0; i < this.length; i++) 
-            if(this.dataStorage[i] == data) 
+            if(this.dataStorage[i].data == data) 
                 return i;
         return -1;
     }
