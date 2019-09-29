@@ -42,11 +42,23 @@ class LinkedList {
         this._head = 0;
     }
 
-    deleteAt(index) {}
+    deleteAt(index) {
+        this.dataStorage.splice(index, 1);
+        this.length--;
+        this._tail = this.dataStorage[this.length - 1];
+    }
 
-    reverse() {}
+    reverse() {
+        this.dataStorage.reverse();
+    }
 
-    indexOf(data) {}
+    indexOf(data) {
+        for(let key of this.dataStorage) 
+            if(this.dataStorage[key] == data) 
+                return key;
+            else
+                return -1;
+    }
 }
 
 module.exports = LinkedList;
